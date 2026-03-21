@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Orbitron, Rajdhani, Share_Tech_Mono } from "next/font/google";
 import "./globals.css";
+import { Footer } from "@/components/Footer";
+import { Header } from "@/components/Header";
 
 const orbitron = Orbitron({
   variable: "--font-orbitron",
@@ -36,7 +38,9 @@ export default function RootLayout({
       className={`${orbitron.variable} ${rajdhani.variable} ${shareTechMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );
