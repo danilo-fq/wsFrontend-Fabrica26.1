@@ -17,7 +17,7 @@ export default function CharacterList({characters}: CharacterListProps) {
         className={
           isGridView
             ? "grid grid-cols-4 gap-3"
-            : "flex flex-col gap-y-5 w-80 px-5"
+            : "flex flex-col gap-y-5 w-96 px-5"
         }
       >
         {characters.map((char) => (
