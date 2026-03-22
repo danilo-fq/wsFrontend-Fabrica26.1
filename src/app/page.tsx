@@ -1,35 +1,71 @@
-import Link from "next/link"
+'use client'
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import CharacterList from "@/components/CharacterList";
+import ErrorCard from "@/components/ErrorCard";
+import FilterBar from "@/components/Filterbar";
+import IsLoadingCard from "@/components/IsLoadingCard";
+import SearchBar from "@/components/SearchBar";
+import { fetchCharacters } from "@/services/characters"
+import type { Character } from "@/types/character";
+import type { StatusFilter } from "@/types/status";
+
+
+export default function Characters() {
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [hasError, setHasError] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [filterTerm, setfilterTerm] = useState<StatusFilter>("");
+
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        setHasError(false);
+        const { results } = await fetchCharacters(searchTerm, filterTerm);
+        setCharacters(results);
+      } catch (error) {
+        console.error(error);
+        setHasError(true);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+
+    const timer = window.setTimeout(() => {
+      loadData();
+    }, 500);
+
+    return () => window.clearTimeout(timer);
+  }, [searchTerm, filterTerm]);
+  
+
+  if(isLoading) {
+    return <IsLoadingCard />
+  }
+
+  if(!characters.length) {
+    return (
+      <main className="flex flex-1 flex-col items-center py-6 gap-y-8">
+        <SearchBar value={searchTerm} onChange={setSearchTerm} />
+        <FilterBar activeFilter={filterTerm} onClick={setfilterTerm} />
+        <h2 className="animate-pulse text-status-muted font-bold text-2xl">
+          Personagem não encontrado!
+        </h2>
+      </main>
+    );
+  }
+
+  if (hasError) {
+    return <ErrorCard />
+  }
+
   return (
-    <main className="flex-1 overflow-hidden relative">
-      <video
-        autoPlay
-        muted
-        loop
-        className="absolute inset-0 w-full h-full object-cover scale-125"
-      >
-        <source src="/videos/rick-and-morty.mp4" type="video/mp4" />
-      </video>
-      <div className="absolute bg-black/70 flex justify-center items-center inset-0">
-        <div className="flex gap-x-4 mt-16">
-          <a
-            href="https://www.adultswim.com/videos/rick-and-morty"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="border rounded-lg py-1 px-4 hover:bg-hover-dark hover:border-hover-dark"
-          >
-            Pagina Oficial
-          </a>
-
-          <Link
-            href="/characters"
-            className="border rounded-lg py-1 px-4 hover:bg-hover-dark hover:border-hover-dark"
-          >
-            Personagens
-          </Link>
-        </div>
-      </div>
+    <main className="flex-1 flex flex-col justify-center items-center py-6 gap-y-8">
+      <SearchBar value={searchTerm} onChange={setSearchTerm} />
+      <FilterBar activeFilter={filterTerm} onClick={setfilterTerm} />
+      <CharacterList characters={characters} />
     </main>
   );
 }
