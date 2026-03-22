@@ -1,4 +1,4 @@
-import type { ResponseAPI } from "@/types/character";
+import type { CharacterDetailsInterface, ResponseAPI } from "@/types/character";
 
 export async function fetchCharacters(name?: string, status?: string): Promise<ResponseAPI> {
   try {
@@ -30,6 +30,44 @@ export async function fetchCharacters(name?: string, status?: string): Promise<R
     const data: ResponseAPI = await response.json()
 
     return data;
+  } catch (error) {
+    console.error('Erro ao Erro ao tentar encontrar os personagens', error)
+    throw error
+  }
+}
+
+export async function fetchCharacterById(id: number): Promise<CharacterDetailsInterface> {
+  try {
+    const BASE_URL = "https://rickandmortyapi.com/api/character";
+    const URL = `${BASE_URL}/${id}`;
+    const response = await fetch(URL);
+
+    if(response.status === 404) {
+      return {
+        id: 0,
+        name: "",
+        status: 'unknown',
+        species: '',
+        image: '',
+        origin: {
+          name: '',
+        },
+        location: {
+          name: '',
+        },
+        gender: 'unknown',
+        episode: [],
+      }
+    }
+
+    if(!response.ok) {
+      throw new Error('Erro ao tentar encontrar o personagem')
+    }
+
+    const data: CharacterDetailsInterface = await response.json();
+
+    return data;
+
   } catch (error) {
     console.error('Erro ao Erro ao tentar encontrar os personagens', error)
     throw error
