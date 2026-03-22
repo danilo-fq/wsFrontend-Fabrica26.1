@@ -1,5 +1,4 @@
-
-export type StatusFilter = "" | "Alive" | "Dead" | "unknown";
+import type { StatusFilter } from "@/types/status";
 
 interface FilterBarProps {
   activeFilter: StatusFilter;

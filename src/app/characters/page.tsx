@@ -4,10 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import CharacterList from "@/components/CharacterList";
-import FilterBar, { type StatusFilter } from "@/components/Filterbar";
+import FilterBar from "@/components/Filterbar";
 import SearchBar from "@/components/SearchBar";
 import { fetchCharacters } from "@/services/characters"
 import type { Character } from "@/types/character";
+import type { StatusFilter } from "@/types/status";
 
 
 export default function Characters() {

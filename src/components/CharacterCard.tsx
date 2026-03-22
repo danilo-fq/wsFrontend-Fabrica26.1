@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Character } from "@/types/character";
+import type { StatusFilter } from "@/types/status";
+import { statusLabels } from "@/types/status";
 
 interface CharacterProps {
   character: Character;
@@ -33,7 +35,7 @@ export default function CharacterCard({ character }: CharacterProps) {
           <p
             className={`${statusColors[status]} border px-2 rounded-4xl text-xs`}
           >
-            ● {status}
+            ● {statusLabels[status as StatusFilter]}
           </p>
         </div>
       </div>
