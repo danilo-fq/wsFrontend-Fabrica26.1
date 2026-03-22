@@ -1,7 +1,9 @@
+export type CharacterStatus = "Alive" | "Dead" | "unknown";
+
 export interface Character {
   id: number;
   name: string;
-  status: 'Alive' | 'Dead' | 'unknown';
+  status: CharacterStatus;
   species: string;
   image: string;
 }
@@ -16,4 +18,15 @@ export interface InfoResponseAPI {
 export interface ResponseAPI {
   info: InfoResponseAPI;
   results: Character[];
+}
+
+export interface CharacterDetailsInterface extends Character {
+  origin: {
+    name: string;
+  };
+  location: {
+    name: string;
+  };
+  gender: 'Female' | 'Male' | 'Genderless' | 'unknown';
+  episode: string[];
 }
